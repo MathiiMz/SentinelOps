@@ -1,4 +1,4 @@
-## 🚨 SentinelOps *In Progress*
+## 🚨 SentinelOps *(In Progress)*
 
 SOC-oriented incident management backend built with Laravel.
 
