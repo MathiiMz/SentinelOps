@@ -69,6 +69,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get activity logs performed by this user.
+     */
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class, 'actor_id');
+    }
+
+    /**
      * Check if user has a specific role.
      */
     public function hasRole($role)

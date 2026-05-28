@@ -60,6 +60,14 @@ class Incident extends Model
     }
 
     /**
+     * Get the activity log associated with this incident.
+     */
+    public function activities()
+    {
+        return $this->hasMany(ActivityLog::class, 'incident_id');
+    }
+
+    /**
      * Get valid severity levels.
      */
     public static function getSeverityLevels()

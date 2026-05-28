@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -116,6 +117,13 @@ class UserController extends Controller
         }
 
         $user->delete();
+
+        ActivityLog::create([
+            'actor_id' => $request->user()->id,
+            'event_type' => 'user.deleted',
+            'message' => "{$request->user()->name} eliminó al usuario {$user->name} ({$user->email})",
+            'meta' => ['deleted_user_id' => $user->id],
+        ]);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Usuario eliminado correctamente.');

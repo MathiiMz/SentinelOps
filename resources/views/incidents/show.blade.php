@@ -13,6 +13,7 @@
         </p>
     </div>
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <a href="{{ route('incidents.export.pdf', $incident) }}" class="btn btn-primary">Exportar PDF</a>
         @if(auth()->user()->isAdmin() || auth()->user()->id === $incident->created_by)
             <a href="{{ route('incidents.edit', $incident) }}" class="btn btn-ghost">Editar</a>
         @endif
@@ -33,17 +34,24 @@
         </div>
 
         <div class="card">
-            <h2 style="font-size: 0.85rem; color: #8b9bb0; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Comentarios ({{ $incident->comments->count() }})</h2>
-            @forelse($incident->comments->sortByDesc('created_at') as $comment)
+            <h2 style="font-size: 0.85rem; color: #8b9bb0; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">
+                Timeline de actividad ({{ $timeline->count() }})
+            </h2>
+            @forelse($timeline as $item)
                 <div style="padding: 0.85rem 0; border-bottom: 1px solid #2a3544;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
-                        <strong style="font-size: 0.85rem;">{{ $comment->user->name }}</strong>
-                        <span style="color: #8b9bb0; font-size: 0.75rem;">{{ $comment->created_at->format('d/m/Y H:i') }}</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <strong style="font-size: 0.85rem;">{{ $item['actor'] }}</strong>
+                            <span class="badge {{ $item['type'] === 'comment' ? 'badge-medium' : 'badge-open' }}">
+                                {{ $item['type'] === 'comment' ? 'Comentario' : 'Evento' }}
+                            </span>
+                        </div>
+                        <span style="color: #8b9bb0; font-size: 0.75rem;">{{ $item['created_at']->format('d/m/Y H:i') }}</span>
                     </div>
-                    <p style="font-size: 0.9rem; white-space: pre-wrap;">{{ $comment->content }}</p>
+                    <p style="font-size: 0.9rem; white-space: pre-wrap;">{{ $item['label'] }}</p>
                 </div>
             @empty
-                <p style="color: #8b9bb0; font-size: 0.9rem;">Sin comentarios aún.</p>
+                <p style="color: #8b9bb0; font-size: 0.9rem;">Sin actividad aún.</p>
             @endforelse
 
             @if(!auth()->user()->isViewer())

@@ -37,6 +37,7 @@ Route::middleware(['auth', 'user.active'])->group(function () {
     Route::delete('/incidents/{incident}', [IncidentController::class, 'destroy'])->name('incidents.destroy');
     Route::post('/incidents/{incident}/comments', [IncidentController::class, 'storeComment'])->name('incidents.comments.store');
     Route::patch('/incidents/{incident}/status', [IncidentController::class, 'updateStatus'])->name('incidents.status');
+    Route::get('/incidents/{incident}/export/pdf', [IncidentController::class, 'exportPdf'])->name('incidents.export.pdf');
 
     Route::middleware('role:admin')->name('admin.')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
